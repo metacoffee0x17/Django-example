@@ -1,0 +1,24 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [{
+        "Action": [
+            "logs:*",
+            "sns:*",
+            "s3:*",
+            "ec2:*",
+            "execute-api:*",
+            "kms:*",
+            "secretsmanager:*",
+            "apigateway:*",
+            "cognito-idp:*",
+            "cloudfront:*",
+            "route53:*",
+            "rds:*",
+            "iam:*",
+            "athena:*",
+            "glue:*"
+        ],
+        "Effect": "Allow",
+        "Resource": "*"
+    }]
+}

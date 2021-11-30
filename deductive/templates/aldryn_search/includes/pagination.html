@@ -1,0 +1,29 @@
+{% load i18n spurl %}
+
+{% if page_obj.has_other_pages %}
+
+<div class="nav">
+
+	<div id="tipue_search_foot">
+		<ul id="tipue_search_foot_boxes">
+			{% if page_obj.has_previous %}
+			<li class="prev"><a href="{% spurl base='' query=request.GET set_query='page={{ page_obj.previous_page_number }}' %}">&laquo; {% trans "previous" %}</a></li>
+			{% endif %}
+			{% for page_num in page_obj.page_range %}
+			{% if page_num %}
+			{% if page_obj.number == page_num %}
+			<li class="current" role="navigation"><span>{{ page_num }}</span></li>
+			{% else %}
+			<li role="navigation"><a href="{% spurl base='' query=request.GET set_query='page={{ page_num }}' %}">{{ page_num }}</a></li>
+			{% endif %}
+			{% else %}
+			<li class="jumper"><span>...</span></li>
+			{% endif %}
+			{% endfor %}
+			{% if page_obj.has_next %}
+			<li class="prev"><a href="{% spurl base='' query=request.GET set_query='page={{ page_obj.next_page_number }}' %}">{% trans "next" %} &raquo;</a></li>
+			{% endif %}
+		</ul>
+	</div>
+</div>
+{% endif %}

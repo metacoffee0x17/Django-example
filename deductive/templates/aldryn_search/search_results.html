@@ -1,0 +1,30 @@
+{% extends "aldryn_search/base.html" %}
+{% load i18n standard_form %}
+
+{% block content_search %}
+ <div class="section-features  bg-white">
+ 	<div class="container">
+ 		<div class="row">
+ 			<div class="col-sm-12">
+ 				<img class="img-responsive" src="{{ MEDIA_URL }}filer_public_thumbnails/filer_public/b2/43/b243419a-b901-455a-94ee-656c3725dd45/aboutus.jpg__1000x250_q85_crop_subsampling-2_upscale.jpg" width="1000" height="250" alt="Search Results">
+ 			</div>
+ 		</div>
+ 		<div class="row">
+ 			<div class="col-sm-12">
+ 				<div class="section-header"><h1>Search Results</h1></div>
+ 				<div id="tipue_search_results_count">
+ 					{% if page_obj.object_list|length == 0 %}
+ 						Nothing found.
+ 					{% else %}
+	 					{{page_obj.object_list|length}} results
+ 					{% endif %}
+ 				</div>
+ 				<div id="tipue_search_content">
+ 					{% include "aldryn_search/includes/search_items.html" %}
+ 				</div>
+ 				{% include "aldryn_search/includes/pagination.html" with obj_string=_('results') %}
+ 			</div>
+ 		</div>
+	</div>
+ </div>
+{% endblock %}

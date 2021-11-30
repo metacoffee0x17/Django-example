@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load cms_tags %}
+
+{% block title %}{% page_attribute "page_title" %}{% endblock title %}
+{% block meta-description %}
+	<meta name="description" content="{% page_attribute 'meta_description' %}">
+{% endblock meta-description %}
+
+{% block content %}
+	<div id="content" class="bg-white">
+		<div class="container">
+			<div class="row article-page-banner">
+				<div class="col-sm-12">
+					{% placeholder "banner" %}					
+				</div>
+			</div>
+
+		
+		{% placeholder "content" %}
+	
+		</div>
+	</div>
+	{% placeholder "features" %}
+	{% placeholder "articles" %}	
+
+{% endblock content %}
+

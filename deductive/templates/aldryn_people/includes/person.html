@@ -1,0 +1,33 @@
+{% load i18n thumbnail cms_tags aldryn_people_tags %}
+
+<div class="row post">
+    {% if not forloop.counter|divisibleby:"2" %}
+        <div class="col-sm-3 img" style="background-image: url({{ person.visual.url }})">
+            <img class="hidden" alt="{{ person.name }}, Deductive {{ person.function }}" src="{{ person.visual.url }}">
+        </div>
+    {% endif %}
+    <div class="col-sm-9">
+        <h2>
+            {% if not instance and not detail_view or instance.show_links %}
+                {{ person.name }}
+            {% else %}
+                {% render_model person 'name' %}
+            {% endif %}
+        </h2>
+        {% if group.name == "Management Team" %}
+        <div class="text-success">
+            {{ person.function }}
+        </div>
+        {% endif %}
+        <div>
+            {% if person.description %}
+                {{ person.description|safe }}
+            {% endif %}
+        </div>
+    </div>
+    {% if forloop.counter|divisibleby:"2" %}
+        <div class="col-sm-3 img" style="background-image: url({{ person.visual.url }})" alt="{{ person.name }})">
+            <img class="hidden" alt="{{ person.name }}, Deductive {{ person.function }}" src="{{ person.visual.url }}">
+        </div>
+    {% endif %}
+</div>

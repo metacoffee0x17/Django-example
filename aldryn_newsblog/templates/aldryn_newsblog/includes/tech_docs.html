@@ -1,0 +1,15 @@
+{% load i18n staticfiles thumbnail cms_tags apphooks_config_tags %}
+<ul>
+    {% for article in article_list %}
+    <li class="hentry">
+        <strong>{{ article.title }}</strong> 
+                - 
+                {% if not article.summary == None %}
+                    <span class="entry-summary"> {{ article.summary | striptags }}</span>
+                {% endif %}
+            <a href="{{ article.get_absolute_url }}" rel="bookmark" title="Permalink to {{PAGE_TAG}}, {{ article.title|striptags }}">
+            (more)    
+        </a>
+    </li>
+    {% endfor %}
+</ul>

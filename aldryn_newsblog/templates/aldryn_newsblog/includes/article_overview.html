@@ -1,0 +1,39 @@
+{% load i18n staticfiles thumbnail cms_tags apphooks_config_tags %}
+<div class="row post">
+    <article class="hentry {% if article.is_featured %} featured{% endif %} {% if not article.published %} unpublished{% endif %}">
+        {% if not forloop.counter|divisibleby:"2" %}
+        <a href="{{article.get_absolute_url}}">
+            <div class="col-sm-5 img" style="background-image: url({% thumbnail article.featured_image 500x250 crop subject_location=article.featured_image.subject_location %})">
+                    <img src="{% thumbnail article.featured_image 500x250 crop subject_location=article.featured_image.subject_location %}" alt="{{ article.title }}" hidden />
+            </div>
+        </a>
+        {% endif %}
+        <div class="col-sm-7">
+            <header>
+                <a href="{{article.get_absolute_url}}">
+                    <h3 class="entry-title">
+                        {% render_model article "title" %}
+                    </h3>
+                </a>
+            </header>
+            <a href="{{article.get_absolute_url}}">
+                <footer class="post-info">
+                    <abbr class="vcard author">
+                        <span class="fn">{{ article.author }}</span>,
+                        <span class="updated">{{ article.publishing_date|date:"D d F Y" }}</span>
+                    </abbr>
+                </footer>
+            </a>
+            <div class="entry-summary"> <a href="{{article.get_absolute_url}}"> {% render_model article "lead_in" "" "" "truncatewords:'49'|striptags" %} </a> </div>
+            <div style="display: inline-block; width: 100%;"><a class="pull-right btn btn-primary" href="{{article.get_absolute_url}}">Read More</a></div>
+        </div>
+        {% if forloop.counter|divisibleby:"2" %}
+
+        <a href="{{article.get_absolute_url}}">
+            <div class="col-sm-5 img" style="background-image: url({% thumbnail article.featured_image 500x250 crop subject_location=article.featured_image.subject_location %})">
+                <img src="{% thumbnail article.featured_image 500x250 crop subject_location=article.featured_image.subject_location %}" alt="{{ article.title }}" hidden />
+            </div>
+        </a>
+        {% endif %}
+    </article>
+</div>

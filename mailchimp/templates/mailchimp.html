@@ -1,0 +1,58 @@
+<!-- Begin MailChimp Signup Form -->
+{% load sekizai_tags %}
+<div id="mailchimp" class="body article hidden-print">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Need help? Get in touch...</h2>
+                    </div>
+                    <div class="panel-body">
+                        <p>Sign up below and one of our data consultants will get right back to you</p>
+                        <form action="https://mailer.deductive.com/addsub" method="get" name="email_signup" class="validate">
+                            {% csrf_token %}
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="sr-only" for="fname">First name</label>
+                                    <input type="text" required value="" name="fname" class="form-control" id="fname" placeholder="First Name">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="sr-only" for="lname">Last name</label>
+                                    <input type="text" required value="" name="lname" class="form-control" id="lname" placeholder="Last Name">
+                                </div>
+                            </div>
+                            <div class="form-row form-group">
+                                <div class="form-group col-md-6">
+                                    <label class="sr-only" for="email">Email address</label>
+                                    <input type="email" required value="" name="email" class="form-control" id="email" placeholder="Email address">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="interest" class="sr-only">Primary Interest Area </label>
+                                    <select name="interest" class="form-control" id="interest">
+                                        {% for item in MAILCHIMP_INTEREST %}
+                                            {% if PAGE_TAG|lower == item|lower %}
+                                                <option selected value="{{item}}">Talk to me about {{item}}</option>
+                                            {% else %}
+                                                <option value="{{item}}">Talk to me about {{item}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <input type='submit' class="btn btn-success"/>
+                                        <input type='hidden' name="listid" value="de38a8cf88"/>
+                                        <input type='hidden' name="redirect" value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}/thank-you/"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,153 @@
+{% load cms_tags menu_tags sekizai_tags %}
+{% load i18n staticfiles thumbnail cms_tags apphooks_config_tags custom_tags %}
+<!doctype html>
+<html amp lang="en">
+    <head>
+        <title>{{ article.title }}{% if article.title|length < 61 %} | Deductive{% endif %}{% if article.title|length < 34 and article.title != 'Data Science' %} | Data Science{% endif %}{% if article.title|length < 17 and article.title != 'Data Analytics' %} | Data Analytics{% endif %}{% if article.title|length < 2 and article.title != 'Data Strategy' %} | Data Strategy{% endif %}</title>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans%7CRoboto+Slab" rel="stylesheet"/>
+        <link rel="shortcut icon" type="image/png" href="{{ MEDIA_URL }}favicon.ico"/>
+        <script async custom-element="amp-analytics"
+        src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+        <script async src="https://cdn.ampproject.org/v0.js"></script>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,minimum-scale=1" />
+
+        <link href="https://deductive.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Deductive Full Atom Feed">
+        <link href="https://deductive.com/feeds/atom.xml" type="application/atom+xml" rel="alternate" title="Deductive Atom Feed">
+
+        {% for keyword in article.tags.all %}
+            <meta name="tags" content="{{keyword.name}}" />
+        {% endfor %}
+        {% if article.description %}
+            <meta name="description" content="Deductive {{article.category}}. {{article.description}}" />
+            <meta property="og:description" content="{{article.description}}" />
+        {% else %}
+            <meta name="description" content="Deductive {{article.category}}. {{article.lead_in|truncatechars:140|striptags }}" />
+            <meta property="og:description" content="{{article.lead_in|truncatechars:140|striptags}}" />
+        {% endif %}
+        {% if article.canonical_url %}
+            <link rel="canonical" href="{{article.canonical_url}}"/>
+            <meta property="og:url" content="{{ article.canonical_url }}" />
+        {% else %}
+            <link rel="canonical" href="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}{{ article.get_absolute_url }}">
+            <meta property="og:url" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}{{ article.get_absolute_url }}" />
+        {% endif %}
+        <meta property="og:title" content="{{ article.title }}" />
+        {% if article.featured_image %}
+        <meta property="og:image" content="{{article.featured_image.url}}" />
+        {% endif %}
+        <script type="application/ld+json">
+        {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}{{article.get_absolute_url}}"
+        },
+        "headline": "{{ article.title }}",
+        {% if article.featured_image %}
+        "image": [
+        "{{article.featured_image.url}}"
+        ],
+        {% endif %}
+        "datePublished": "{{ article.publishing_date|date }}",
+        "dateModified": "{{ article.publishing_date|date }}",
+        "author": {
+        "@type": "Person",
+        "name": "{{article.author}}"
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "Deductive",
+        "logo": {
+        "@type": "ImageObject",
+        "url": "https://deductive.com/theme/img/logo-black-amp.png",
+        "height": 60,
+        "width": 259
+        }
+        },
+        {% if article.description %}
+            "description":"Deductive {{article.category}}. {{article.description}}"
+        {% else %}
+            "description": "Deductive {{article.category}}. {{ article.lead_in|striptags|truncatechars:140 }}"
+        {% endif %}
+        }
+        </script>
+        <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+        <style amp-custom>
+        body{font-family:Roboto Slab;}
+        h1,h2,h3,h4,strong, #content p {font-family:Open Sans;}
+        .post-info {color:#888; text-transform:uppercase; font-size:80%;line-height:80%}
+        .footer {text-align: center;margin:10px;}
+        </style>
+    </head>
+    <body>
+        {% if article.featured_image %}
+        <div id="content" class="body article">
+            <div >
+                <div class="row">
+                    <div class="col-sm-12">
+                        <amp-img src="{% thumbnail article.featured_image 500x250 crop subject_location=article.featured_image.subject_location %}" width="500" height="250" alt="{{ article.title }}" layout="responsive"></amp-img>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row hentry">
+            <div class="col-sm-8">
+                <div class="section-header">
+                    <header>
+                        <h1 class="entry-title">
+                        {{ article.title }}</h1>
+                        <div>
+                        </div>
+                    </header>
+                </div>
+                <footer class="post-info">
+                        <abbr class="vcard author">
+                            <span class="fn">{{ article.author }}</span>,
+                            <span class="updated">{{ article.publishing_date|date }}</span>
+                        </abbr>
+                        <p>Read more on <a href="{{ article.get_absolute_url }}">deductive.com</a></p>
+                    </footer>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="entry-content text-justify">
+                        {% autoescape off %}
+
+                            {{ article.lead_in|remove_img }}
+
+                        {% endautoescape %}
+                        <div class="footer">
+                            Get in touch with
+                                {{ article.author }},
+                                <a href="{{ article.get_absolute_url }}#mailchimp">here</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <amp-analytics type="googleanalytics">
+            <script type="application/json">
+            {
+            "vars": {
+            "account": "UA-78614441-1"
+            },
+            "triggers": {
+            "trackPageviewWithCustomUrl": {
+            "on": "visible",
+            "request": "pageview",
+            "vars": {
+            "title": "{{ article.title }}",
+            "documentLocation": "{{ request.META.HTTP_HOST }}{{article.get_absolute_url}}"
+            }
+            }
+            }
+            }
+            </script>
+        </amp-analytics>
+    </body>
+</html>

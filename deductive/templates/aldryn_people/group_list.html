@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n cms_tags %}
+{% block title %}{% page_attribute "page_title" %}{% endblock title %}
+{% block meta-description %}
+	<meta name="description" content="{% page_attribute 'meta_description' %}">
+{% endblock meta-description %}
+{% block content %}
+    {% for group in group_list %}
+	    <div class="section-features  bg-white">
+	    	<div class="container">
+	    		<div class="row ">
+	    			<div class="col-sm-12">
+	    				<div class="section-header">
+	    					<h1>{% render_model group 'name' %}</h1>
+	    				</div>
+	    				<div>
+	    					<p>{% render_model group 'description' %}</p>
+	    				</div>
+	    			</div>
+	    		</div>
+	    	</div>
+	    </div>
+	    <div class="tag_posts">
+	    	<div class="container">
+	    		{% if group.name == "The full team" %}
+	    			<div class="row">
+	    		{% endif %}
+    			{% for person in group.people.all %}
+		    		{% if group.name == "The full team" %}
+						{% include "aldryn_people/includes/full_team.html" with person=person %}
+					{% else %}
+	    			    {% include "aldryn_people/includes/person.html" with person=person %}
+    			    {% endif %}
+    			{% endfor %}
+
+    			{% if group.name == "The full team" %}
+    				</div>
+    			{% endif %}
+	    	</div>
+	    </div>
+    {% endfor %}
+    {% if ungrouped_people %}
+        <h2>{% trans "Ungrouped" %}</h2>
+        {% for person in ungrouped_people %}
+            {% include "aldryn_people/includes/person.html" with person=person %}
+        {% endfor %}
+    {% endif %}
+{% endblock content %}

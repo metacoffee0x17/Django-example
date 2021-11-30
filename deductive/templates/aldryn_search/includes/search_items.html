@@ -1,0 +1,7 @@
+{% load i18n highlight %}
+{% for result in page_obj.object_list %}
+
+<div class="tipue_search_content_title"><a href="{{ result.url }}">{{ result.title }}</a></div>
+<div class="tipue_search_content_text"><p>{% highlight result.text with request.GET.q %}</p></div>
+
+{% endfor %}

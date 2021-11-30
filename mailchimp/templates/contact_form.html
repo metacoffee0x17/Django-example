@@ -1,0 +1,53 @@
+{% load sekizai_tags %}
+<form action="https://mailer.deductive.com/addsub" method="get" name="email_signup" class="validate contact-form">
+  <fieldset>
+  <legend>Your Details:</legend>
+  {% csrf_token %}
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label class="sr-only" for="fname">First name</label>
+            <input type="text" required value="" name="fname" class="form-control" id="fname" placeholder="First Name">
+        </div>
+        <div class="form-group col-md-12">
+            <label class="sr-only" for="lname">Last name</label>
+            <input type="text" required value="" name="lname" class="form-control" id="lname" placeholder="Last Name">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label class="sr-only" for="email">Email address</label>
+            <input type="email" required value="" name="email" class="form-control" id="email" placeholder="Email address">
+        </div>
+        <div class="form-group col-md-12">
+            <label for="interest" class="sr-only">Primary Interest Area </label>
+            <select name="interest" class="form-control" id="interest">
+                {% for item in FREEBIE_CHOICES %}
+                    {% if PAGE_TAG|lower == item|lower %}
+                        <option selected value="{{item}}">{{item}}</option>
+                    {% else %}
+                        <option value="{{item}}">{{item}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-12">
+          <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="{{RECAPTCHA_SITE_KEY}}"></div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-12">
+            <div class="input-group">
+                <button type="submit" class="btn btn-success" id="submit-btn" disabled>Swag Me!</button>
+                <input type='hidden' name="listid" value="bf79f85627"/>
+                <input type='hidden' name="redirect" value="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}/thank-you/"/>
+            </div>
+        </div>
+    </div>
+  </fieldset>
+</form>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<script>
+  function recaptchaCallback() {
+    $('#submit-btn').removeAttr("disabled");
+  }
+</script>

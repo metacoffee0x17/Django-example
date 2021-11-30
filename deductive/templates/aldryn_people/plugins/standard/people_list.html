@@ -1,0 +1,76 @@
+{% load i18n %}
+
+{% if not people_groups %}
+    {# if grouping is disabled, list only people #}
+    {% for person in people %}
+        {% include "aldryn_people/includes/person.html" with person=person %}
+    {% endfor %}
+{% else %}
+    {# if enabled, we group the people by categories defined #}
+    {% language instance.language %}
+        {# IMPORTANT: first show people with a group #}
+        {% for group, people_list in people_groups.items %}
+            {% if group.name and not group.name == "The full team" %}
+	            <div class="section-features  bg-white">
+	            	<div class="container">
+	            		<div class="row ">
+	            			<div class="col-sm-12">
+	            				{% include "aldryn_people/includes/group.html" %}
+	            			</div>
+	            		</div>
+	            	</div>
+	            </div>
+	            <div class="tag_posts">
+	            	<div class="container">
+	            		{% for person in people_list %}
+			    			{% include "aldryn_people/includes/person.html" with person=person %}
+	            		{% endfor %}
+	            	</div>
+	            </div>
+            {% endif %}
+        {% endfor %}
+
+        {% for group, people_list in people_groups.items %}
+            {% if group.name == "The full team" %}
+	            <div class="section-features  bg-white">
+	            	<div class="container">
+	            		<div class="row ">
+	            			<div class="col-sm-12">
+	            				{% include "aldryn_people/includes/group.html" %}
+	            			</div>
+	            		</div>
+	            	</div>
+	            </div>
+	            <div class="tag_posts">
+	            	<div class="container">
+	            		<div class="row">
+	            		{% for person in people_list %}
+			    			{% include "aldryn_people/includes/full_team.html" with person=person %}
+	            		{% endfor %}
+	            		</div>
+	            	</div>
+	            </div>
+            {% endif %}
+        {% endfor %}
+
+        {# IMPORTANT: and than the remaining, if any #}
+        {% if groupless_people.count %}
+	        <div class="section-features  bg-white">
+	        	<div class="container">
+	        		<div class="row ">
+	        			<div class="col-sm-12">
+	        				<h2>{% trans "Ungrouped" %}</h2>
+	        			</div>
+	        		</div>
+	        	</div>
+	        </div>
+	        <div class="tag_posts">
+	        	<div class="container">
+		            {% for person in groupless_people.all %}
+		                {% include "aldryn_people/includes/person.html" with person=person group="true" %}
+		            {% endfor %}
+	        	</div>
+	        </div>
+        {% endif %}
+    {% endlanguage %}
+{% endif %}

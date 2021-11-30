@@ -1,0 +1,33 @@
+# This is a sample build configuration for Python.
+# Check our guides at https://confluence.atlassian.com/x/x4UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: lambci/lambda:build-python3.6
+
+pipelines:
+  branches:
+    staging:
+      - step:
+          name: Deploy staging stack
+          deployment: staging
+          caches:
+            - pip
+          script:
+            - # Deploy the STAGING stack
+            - yum install -y mysql-devel
+            - pip install --upgrade -r ./requirements.txt
+            - pip install mysqlclient==1.3.14
+            - echo "Y" | ./project_deploy.sh STAGING deploy
+    master:
+      - step:
+          name: Deploy production stack
+          deployment: production
+          caches:
+            - pip
+          script:
+            - # Deploy the PRODUCTION stack
+            - yum install -y mysql-devel
+            - pip install --upgrade -r ./requirements.txt
+            - pip install mysqlclient==1.3.14
+            - echo "Y" | ./project_deploy.sh PRODUCTION deploy

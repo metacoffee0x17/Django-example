@@ -1,0 +1,46 @@
+{% load i18n staticfiles thumbnail cms_tags apphooks_config_tags pass_script %}
+<div class="row">
+    <div class="col-sm-12">
+        <img class="img-responsive" src="{% thumbnail article.featured_image 1000x250 crop subject_location=article.featured_image.subject_location %}" alt="{{ article.title }}">
+    </div>
+</div>
+<div class="row hentry">
+    <div class="col-sm-12">
+        <div class="section-header">
+            <header>
+                <h1 class="entry-title"> {% render_model article "title" %} </h1>
+            </header>
+        </div>
+        {% if not article.tags.first.name == 'Deductive Pipeline API' and not article.tags.first.name == 'Deductive Tools' %}
+        <footer class="post-info">
+            <abbr class="vcard author">
+                <span class="fn">{{ article.author }}</span>,
+                <span class="updated">{{ article.publishing_date|date:"D d F Y" }}</span>
+            </abbr>
+        </footer>
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="entry-content text-justify">
+            {{ article.lead_in|pass_script|safe}}
+
+            {% if article.tags.first.name == 'Deductive Pipeline API' or article.tags.first.name == 'Deductive Tools' %}
+                <h2>Related documentation</h2>
+                <ul>
+                    {% for new_article in related_articles %}
+                    <li class="hentry">
+                        <strong>{{ new_article.title }}</strong>
+                        -
+                        {% if not new_article.summary == None%}
+                            <span class="entry-summary">{{ new_article.summary }}</span>
+                        {% endif %}
+                        <a href="{{ new_article.get_absolute_url }}" rel="bookmark" title="Permalink to {{PAGE_TAG}}, {{ new_article.title|striptags }}">(more)</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>

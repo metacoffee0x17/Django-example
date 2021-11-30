@@ -1,0 +1,17 @@
+{% if article.tags %}
+    {% if not article.tags.first.name == 'Deductive Pipeline API' and not article.tags.first.name == 'Deductive Tools' %}
+
+        <div class="tag_posts hidden-print">
+            <div class="container">
+                <div class="row">
+                    <h2>Other articles about {{article.related_tag}}</h2>
+                </div>
+                {% for article in related_articles %}
+                    {% include "aldryn_newsblog/includes/article_overview.html" with namespace=instance.app_config.namespace %}     
+                {% empty %}
+                    <p>No items available</p>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

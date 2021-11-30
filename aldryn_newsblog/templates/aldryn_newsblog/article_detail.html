@@ -1,0 +1,139 @@
+{% extends "aldryn_newsblog/base.html" %}
+{% load i18n cms_tags apphooks_config_tags sekizai_tags %}
+
+{% block title %}
+    {{ article.title }}{% if article.title|length < 61 %} | Deductive{% endif %}{% if article.title|length < 34 and article.title != 'Data Science' %} | Data Science{% endif %}{% if article.title|length < 17 and article.title != 'Data Analytics' %} | Data Analytics{% endif %}{% if article.title|length < 2 and article.title != 'Data Strategy' %} | Data Strategy{% endif %}
+{% endblock %}
+{% block head %}
+    {% for keyword in article.tags.all %}
+        <meta name="tags" content="{{keyword.name}}" />
+    {% endfor %}
+
+    {% if article.summary %}
+        <meta name="description" content="Deductive {{article.app_config|lower}}. {{article.summary}}" />
+        <meta property="og:description" content="{{article.summary}}" />
+        <meta name="twitter:description" content="{{article.summary}}" />
+    {% else %}
+        <meta name="description" content="Deductive {{article.app_config|lower}}. {{article.lead_in|striptags|truncatechars:140}}" />
+        <meta property="og:description" content="{{article.lead_in|striptags|truncatechars:140}}" />
+        <meta property="twitter:description" content="{{article.lead_in|striptags|truncatechars:140}}" />
+    {% endif %}
+
+    {% if article.canonical_url %}
+        <link rel="canonical" href="{{article.canonical_url}}" />
+        <meta property="og:url" content="{{ article.canonical_url }}" />
+    {% else %}
+        <link rel="canonical" href="{{ request.META.HTTP_HOST }}{{ article.get_absolute_url }}">
+        <meta property="og:url" content="{{ request.META.HTTP_HOST }}{{ article.get_absolute_url }}" />
+    {% endif %}
+
+    <meta property="og:title" content="{{ article.title }}" />
+    <meta property="og:image" content="{{article.featured_image.url}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@deductive4data" />
+    <script type="application/ld+json">
+    {
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{request.META.HTTP_HOST}}{{ article.get_absolute_url }}"
+    },
+    "headline": "{{ article.title }}",
+    {% if article.featured_image %}
+    "image": [
+    "{{article.featured_image.url}}"
+    ],
+    {% endif %}
+    "datePublished": "{{ article.publishing_date|date }}",
+    "dateModified": "{{ article.publishing_date|date }}",
+    "author": {
+        "@type": "Person",
+        "name": "{{article.author}}"
+    },
+    "publisher": {
+    "@type": "Organization",
+    "name": "Deductive",
+    "logo": {
+    "@type": "ImageObject",
+    "url": "https://deductive.com/theme/img/logo-black-amp.png",
+    "height": 60,
+    "width": 259
+    }
+    },
+    "description":"Deductive {{article.category}}. {{article.lead_in|striptags|truncatechars:140}}"
+    }
+    </script>
+    {% if not article.no_amp == True %}
+    <link rel="amphtml" href="https://deductive.com{{ article.get_absolute_url }}index.amp.html">
+    {% endif %}
+    {% if article.additional_info == 'tensorflow' %}
+        <style rel="text/css">
+            .tensorflowjs {
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: auto;
+                position: absolute;
+            }
+
+            canvas.tensorflowjs {
+                position: absolute;
+            }
+
+            video.tensorflowjs {
+                position: absolute;
+
+            }
+
+            #root {
+                margin: 0 auto;
+                position: relative;
+            }
+
+            .btn-responsive {
+                white-space: normal !important;
+                word-wrap: break-word;
+            }
+        </style>
+    {% endif %}
+{% endblock %}
+{% block newsblog_content %}
+    <div id="content" class="{% if not article.additional_info == 'tensorflow' and not article.tags.first.name == 'Deductive Pipeline API' and not article.tags.first.name == 'Deductive Tools' %} article {% endif %} bg-white">
+        <div class="container">
+            {% if article.additional_info == 'tensorflow' %}
+                {% include "aldryn_newsblog/includes/tensorflow.html" %}
+            {% else %}
+                {% include "aldryn_newsblog/includes/article.html" with detail_view="true" %}
+            {% endif %}
+        </div>
+    </div>
+    {% include "aldryn_newsblog/includes/mailchimp.html" %}
+    {% if not article.additional_info == 'tensorflow' %}
+        {% include "aldryn_newsblog/includes/tag_posts.html" %}
+    {% endif %}
+{% endblock %}
+{% block footer %}
+
+{% block postJquery %}
+{% endblock %}
+<script>
+  $( "form.form-inline" ).submit(function( event ) {
+      var url = 'https://mailer.deductive.com/addsub?fname=&lname=&email=' + $('input#mini_input_email').val() + '&interest={{article.category}}&listid=de38a8cf88';
+      $.get(url);
+      $('button#mini_submitButton').html("Done");
+      $('button#mini_submitButton').append('<img height="1" width="1" style="display:none;" alt="" src="https://dc.ads.linkedin.com/collect/?pid=101877&conversionId=178386&fmt=gif" />');
+      event.preventDefault();
+  });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-78614441-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<script src="https://pixels.deductive.com/t.js"></script>
+<script src="https://px.ads.linkedin.com/collect/?time=1565232893078&amp;pid=101877&amp;url=https%3A%2F%2Fdeductive.com%2Fyear-gdpr-blocked-users-hot-potato-opt-in-fatigure%2F&amp;fmt=js&amp;s=1" type="text/javascript"></script>
+{% endblock footer %}

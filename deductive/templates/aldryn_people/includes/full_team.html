@@ -1,0 +1,10 @@
+{% load i18n thumbnail cms_tags aldryn_people_tags custom_tags %}
+
+    <div class="col-sm-3">
+        <div class="post">
+            <img src="{% thumbnail person.visual 500x500 crop subject_location=person.visual.subject_location %}" alt="{{person.name}} from Deductive">
+            <div class="caption text-center text-info">
+                {{ person.name|split:' '|slice:":1"|join:""}}
+            </div>
+        </div>
+    </div>

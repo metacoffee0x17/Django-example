@@ -1,0 +1,23 @@
+{% load thumbnail %}
+
+<div class="partner-tile">
+  <div class="tile-header">
+    <h4>{{tile.partner_name}}</h4>
+    <div class="partner-logo">
+      <img src="{% thumbnail tile.partner_logo 2000x1000 upscale subject_location=tile.partner_logo.subject_location %}" />
+    </div>
+  </div>
+  <div class="tile-summary">
+    <p>{{tile.partner_summary}}</p>
+  </div>
+  <div class="tile-footer">
+    <div class="partner-label">
+      {% for label in tile.partner_tags %}
+      <span>{{label}}</span>
+      {% endfor %}
+    </div>
+    <div class="partner-icon">
+      <i class="{{tile.partner_icon}}"></i>
+    </div>
+  </div>
+</div>

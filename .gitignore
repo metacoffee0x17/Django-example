@@ -1,0 +1,13 @@
+*.sqlite3
+.idea
+migrations
+*.log
+__pycache__/
+venv
+zappa_settings.json
+/templates/
+*.zip
+*.pyc
+project.db
+libmysqlclient.so.18
+.DS_Store

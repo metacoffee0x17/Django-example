@@ -1,0 +1,11 @@
+{% load i18n %}
+
+{% if PAGE_TAG|lower == 'deductive tools' or PAGE_TAG|lower == 'deductive pipeline api' %}
+	{% include "aldryn_newsblog/includes/tech_docs.html" %}
+{% else %}
+	{% for article in article_list %}
+		{% include "aldryn_newsblog/includes/article_overview.html" with namespace=instance.app_config.namespace %}		
+	{% empty %}
+	    <p>{% trans "No items available" %}</p>
+	{% endfor %}
+{% endif %}

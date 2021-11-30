@@ -1,0 +1,26 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "ssm:SendCommand",
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ec2:us-west-2:538486622005:instance/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "ec2:ResourceTag/*": [
+                        param1
+                    ]
+                }
+            }
+        },
+        {
+            "Action": "ssm:SendCommand",
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ssm:us-west-2:*:document/AWS-RunRemoteScript"
+            ]
+        }
+    ]
+}

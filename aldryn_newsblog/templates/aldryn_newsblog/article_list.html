@@ -1,0 +1,43 @@
+{% extends "aldryn_newsblog/base.html" %}
+{% load i18n %}
+{% block title %}Latest Page {{ page_obj.number }} | Deductive | Data Science | {%endblock%}
+{% block head %}
+    <meta name="tags" content="Deductive, Data Science, Data Analytics, Data Strategy" />
+    <meta name="description" content="Deductive Latest Updates Page {{ page_obj.number }}, Data Science, Data Analytics, Data Strategy"/>
+    <link id="avast_os_ext_custom_font" href="moz-extension://9d4f7116-0305-40b3-b530-db29efcbac51/common/ui/fonts/fonts.css" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block newsblog_content %}
+	<div class="tag_posts">
+		<div class="container">
+			<div class="row">
+				<h2>Lastest Articles</h2>
+			</div>
+		    {% for article in article_list %}
+		        {% include "aldryn_newsblog/includes/article_overview.html" %}
+		    {% empty %}
+		        <p>{% trans "No items available" %}</p>
+		    {% endfor %}
+
+		    {% include "aldryn_newsblog/includes/pagination.html" %}
+	    </div>
+    </div>
+{% endblock %}
+{% block footer %}
+	<script>
+	    (function (i, s, o, g, r, a, m) {
+	        i['GoogleAnalyticsObject'] = r;
+	        i[r] = i[r] || function () {
+	            (i[r].q = i[r].q || []).push(arguments)
+	        }, i[r].l = 1 * new Date();
+	        a = s.createElement(o),
+	            m = s.getElementsByTagName(o)[0];
+	        a.async = 1;
+	        a.src = g;
+	        m.parentNode.insertBefore(a, m)
+	    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+	    ga('create', 'UA-78614441-1', 'auto');
+	    ga('send', 'pageview');
+	</script>
+	<script src="https://pixels.deductive.com/t.js"></script>
+
+{% endblock %}

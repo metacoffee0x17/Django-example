@@ -1,0 +1,70 @@
+<div class="latest-video tag_posts">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Latest Video</h2>
+            </div>
+            
+        </div>
+        {% with video_posts|first as post %}
+        <div class="row post">
+            <div class="col-md-5 text-center">
+                <div style="display: flex; align-items: center; justify-content: center;">
+                    <iframe src="{{ post.embedded_link }}" frameborder="0" allowfullscreen="true" width="400px" height="200px"></iframe>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <h3 class="post-title">
+                    {{ post.title }}
+                </h3>
+                <div class="post-content">
+                    {{ post.summary }}
+                    <div style="display: inline-block; width: 100%;">
+                        <a class="pull-right text-primary" href="#" data-toggle="modal" data-target="#fullText">Full Text</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+    </div>
+</div>
+<div class="modal fade" id="fullText" tabindex="-1" role="dialog" aria-labelledby="fullTextLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            
+        {% with video_posts|first as first_video %}
+        <div class="modal-header">
+            <img src="{{ MEDIA_URL }}img/logo-black.png" width="170px"></img>
+            <!-- <h5 class="modal-title" id="fullTextLabel">{{post.title}}</h5> -->
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: 14px;">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h2>{{first_video.title}}</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <iframe src="{{ first_video.embedded_link }}" frameborder="0" allowfullscreen="true" width="400px" height="200px"></iframe>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        {{ first_video.description }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p>© 2020 Deductive, All Rights Reserved</p>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        
+        {% endwith %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load cms_tags sekizai_tags %}
+
+{% block title %}{% page_attribute "page_title" %}{% endblock title %}
+{% block meta-description %}
+	<meta name="description" content="{% page_attribute 'meta_description' %}">
+{% endblock meta-description %}
+
+{% block content %}
+
+	{% placeholder "Hero Slider" %}
+	<div id="content">
+		<div class="container">
+			{% placeholder "content" %}
+		</div>
+	</div>
+	{% placeholder "Latest From Our Team" %}
+	{% placeholder "What Now" %}
+
+	{% addtoblock "js" %}
+	<script type="text/javascript">
+	    $("body").addClass("homepage");
+	    $(".navbar").addClass("navbar-fixed-top");
+	    $(".navbar-brand img").attr('src', '{{ MEDIA_URL }}img/logo.png');
+	    $(window).scroll(function() {
+	        if ($(".navbar").offset().top > 50) {
+	            $('#nav').addClass('affix');
+	            $(".navbar-fixed-top").addClass("top-nav-collapse");
+	        } else {
+	            $('#nav').removeClass('affix');
+	            $(".navbar-fixed-top").removeClass("top-nav-collapse");
+	        }
+	    });
+	</script>
+	{% endaddtoblock %}
+{% endblock content %}

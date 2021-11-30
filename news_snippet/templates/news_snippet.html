@@ -1,0 +1,11 @@
+{% for news_snippet in snippet_list %}
+<h3 class="news-title">
+    {{ news_snippet.title }}
+</h3>
+<div class="news-content">
+    {{ news_snippet.description }}
+</div>
+<div class="news-link">
+    <a target="_blank" rel="noopener noreferrer" href="{{ news_snippet.link }}">{{ news_snippet.link }}</a>
+</div>
+{% endfor %}

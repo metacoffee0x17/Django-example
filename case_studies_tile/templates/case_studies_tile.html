@@ -1,0 +1,20 @@
+{% load thumbnail %}
+
+<div class="case-studies-tile">
+  <div class="tile-header">
+    <h2>{{tile.tile_name}}</h2>
+    <div class="partner-logo">
+      <img src="{% thumbnail tile.tile_icon 100x100 upscale subject_location=tile.tile_icon.subject_location %}" />
+    </div>
+  </div>
+  <div class="tile-summary">
+    <p>{{tile.tile_summary}}</p>
+  </div>
+  <div class="tile-footer text-right">
+    {% if not tile.download_file.url %}
+    <a target="_blank" href="{{tile.detail_link}}"> View details </a>
+    {% else %}
+    <a target="_blank" href="{{tile.download_file.url}}" download=""> Download details </a>
+    {% endif %}
+  </div>
+</div>

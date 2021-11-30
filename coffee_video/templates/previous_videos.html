@@ -1,0 +1,134 @@
+<div class="previous-video">
+    <div class="container">
+        <h2>Previous Videos</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tag-list">
+                    <a href="javascript:;" class="filter-button" tag-name="All">All</a>
+                    {% for tag in tag_list %}
+                    <a href="javascript:;" class="filter-button" tag-name="{{ tag }}">
+                        {{ tag }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row" id="video-list">
+            <div class="spinner-border disable" role="status">
+            </div>
+            <div id="thumb-list">
+            {% for post in video_posts %}
+            <div class="col-md-3">
+                <div class="thumb-item">
+                    <iframe src="{{ post.embedded_link }}" frameborder="0" allowfullscreen="true" width="100%"></iframe>
+                    <a href="javascript:;" onclick="getContentById('{{ post.id }}')">{{post.title}}</a>
+                </div>
+            </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="thumbModal" tabindex="-1" role="dialog" aria-labelledby="thumbModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <img src="{{ MEDIA_URL }}img/logo-black.png" width="170px"></img>
+            <!-- <h5 class="modal-title" id="fullTextLabel">{{post.title}}</h5> -->
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: 14px;">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="thumbModal-body">
+            
+        </div>
+        <div class="modal-footer">
+            <p style="float: left;">© 2020 Deductive, All Rights Reserved</p>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+</div>
+<script>
+    var count = '{{ video_posts|length }}';
+    $(".filter-button").on("click", function() {
+        if ($(this).attr("tag-name") == "All") {
+            $(".filter-button").removeClass("active");
+            $(this).addClass("active");
+        }
+        else {
+            $(".filter-button[tag-name='All']").removeClass("active");
+            if ($(this).hasClass("active"))
+                $(this).removeClass("active");
+            else {
+                $(this).addClass("active");
+            }
+        }
+        $(".spinner-border").removeClass("disable");
+        var tag = [];
+        $('.filter-button.active').each(function(i, obj) {
+            tag.push($(obj).attr("tag-name"));
+        });
+        if (tag.length == 0) {
+            tag.push('All');
+            $(".filter-button[tag-name='All']").addClass("active");
+        }
+        $.ajax({
+            url: '/coffee-video/filter-by-tag/',
+            data: {
+                'count': count,
+                'tag': JSON.stringify(tag)
+            },
+            success: function (data) {
+                var videos = JSON.parse(data.videos)
+                var html = "";
+                videos.map((post) => {
+                    html += `
+                    <div class="col-md-3">
+                        <div class="thumb-item">
+                            <iframe src="${post.link}" frameborder="0" allowfullscreen="true" width="100%"></iframe>
+                            <a href="javascript:;" onclick="getContentById(${post.id})"> ${post.title} </a>
+                        </div>
+                    </div>
+                        `;
+                });
+                $(".spinner-border").addClass("disable");
+                $("#thumb-list").html(html);
+            }
+        });
+    });
+
+    var getContentById = function(id) {
+        $.ajax({
+            url: '/coffee-video/get-content-by-id/',
+            data: {
+                'id': id,
+            },
+            success: function (data) {
+                $("#thumbModal-body").html("");
+                var html = 
+                `
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h2>${data.title}</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <iframe src="${data.link}" frameborder="0" allowfullscreen="true" width="400px" height="200px"></iframe>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>
+                                ${data.description}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                $("#thumbModal-body").html(html);
+                $("#thumbModal").modal();
+            }
+        });
+    }
+</script>
